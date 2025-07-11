@@ -8,11 +8,18 @@ function App() {
   const searchmovies = async (e) => {
     if (query === "") return;
 
-    const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_API_KEY}&query=${query}`);
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_API_KEY}&query=${query}`
+    );
+
     const data = await res.json();
 
-    console.log(data);
-    setMovies(data.results || []);
+    // Sort movies by vote_average (rating) in descending order
+    const sortedResults = (data.results || []).sort(
+      (a, b) => b.vote_average - a.vote_average
+    );
+
+    setMovies(sortedResults);
   }
 
   return (
